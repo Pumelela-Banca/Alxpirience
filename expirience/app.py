@@ -2,14 +2,10 @@
 Runns app and routes
 """
 
-from flask import Flask, render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect
 from home.log_in import RegisterForm, LoginForm
 
-app = Flask(__name__)
-
-
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-# Path: Alxpirience/routes/app.py
+from expirience import app
 
 
 @app.route('/')
@@ -38,5 +34,3 @@ def login():
     """
     form = LoginForm()
     return render_template('login.html', title="Login" , form=form)
-
-
