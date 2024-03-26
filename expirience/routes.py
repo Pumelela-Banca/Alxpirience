@@ -3,7 +3,7 @@ Runns app and routes
 """
 
 from flask import render_template, url_for, flash, redirect
-from home.log_in import RegisterForm, LoginForm
+from .home.log_in import RegisterForm, LoginForm
 
 from expirience import app
 

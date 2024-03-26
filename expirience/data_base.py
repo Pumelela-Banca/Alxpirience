@@ -1,11 +1,7 @@
 """
 data storage module that uses sqlite
 """
-from flask_sqlalchemy import SQLAlchemy
-import Alxpirience.expirience.routes as routes
-
-
-db = SQLAlchemy(routes)
+from expirience import db
 
 
 class User(db.Model):
