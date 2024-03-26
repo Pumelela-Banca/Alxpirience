@@ -1,10 +1,19 @@
 """
 data storage module that uses sqlite
 """
-from expirience import db
+from expirience import db, loginManager
+from flask_login import UserMixin
 
 
-class User(db.Model):
+@loginManager.user_loader
+def get_user(user_id):
+    """
+    returns user by id
+    """
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin):
     """
     creates user table or model
     it has id, username, email, country and password
