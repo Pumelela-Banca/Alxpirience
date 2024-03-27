@@ -71,7 +71,7 @@ def profile():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
-    pass
+    return render_template('profile.html', title="Profile")
 
 @app.route('/editprofile', methods=['GET', 'POST'])
 def editprofile():
