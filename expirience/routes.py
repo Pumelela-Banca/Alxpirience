@@ -36,15 +36,14 @@ def register():
         return redirect(url_for('home'))
     return render_template('register.html', title="Register", form=form)
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     """
     renders login page and hadles validation
     """
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
 
     form = LoginForm()
+    print(User.query.filter_by(username=form.username.data).first())
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
