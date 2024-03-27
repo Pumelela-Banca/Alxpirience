@@ -12,7 +12,7 @@
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-          <div class="container">
+          <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('home') }}">
               <img src="static/images/large.ico" alt="" width="30" height="24" class="d-inline-block align-text-top">
             </a>
@@ -27,8 +27,24 @@
               </div>
               <!-- Navbar Right Side -->
               <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                {% if current_user.is_authenticated %}
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  User: {{ current_user.username }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="nav-item nav-link" href="{{ url_for('editprofile') }}">Edit Profile</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('profile') }}">View Profile</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('editSkills') }}">Edit Skills</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('addskills') }}">Add Skills</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('createproject') }}">Create Job</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('myprojects') }}">View/Delete My Jobs</a></li>
+                </ul>
+                  <a class="nav-item nav-link" href="{{ url_for('jobs') }}">Jobs</a>
+                  <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                  <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                  <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                {% endif %}
               </div>
             </div>
           </div>
