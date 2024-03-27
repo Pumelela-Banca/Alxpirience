@@ -92,6 +92,7 @@ def editprofile():
         db.session.commit()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('profile'))
+    return render_template('editprofile.html', title="Edit Profile", form=form)
 
 @app.route('/addskills', methods=['GET', 'POST'])
 @login_required
