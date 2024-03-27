@@ -41,7 +41,8 @@ def login():
     """
     renders login page and hadles validation
     """
-
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     print(User.query.filter_by(username=form.username.data).first())
     if form.validate_on_submit():
@@ -96,6 +97,7 @@ def addskills():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
+    render_template('addskills.html', title="Add Skills")
     
 
 @app.route('/jobs')
@@ -113,7 +115,7 @@ def projects():
     """
     route to all projects page
     """
-    pass
+    render_template('projects.html', title="Projects")
 
 @app.route('/myprojects', methods=['GET', 'POST'])
 def myprojects():
@@ -123,7 +125,7 @@ def myprojects():
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
     
-    pass
+    render_template('myprojects.html', title="My Projects")
 
 @app.route('/createproject', methods=['GET', 'POST'])
 def createproject():
