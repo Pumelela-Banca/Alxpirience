@@ -47,6 +47,19 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
+                    {{ form.country.label(class="form-control-label") }}
+                    {% if form.country.errors %}
+                        {{ form.password(class="form-control form-conntrol-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.country(class="form-control form-conntrol-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
                     {{ form.confirm_password.label(class="form-control-label") }}
 
                     {% if form.confirm_password.erros %}
