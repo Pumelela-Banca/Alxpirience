@@ -2,7 +2,7 @@
 Runns app and routes
 """
 
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect, request
 from .home.log_in import RegisterForm, LoginForm, UserUpdateForm, CreateJobForm
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -50,7 +50,8 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             flash('Login Successful', 'success')
             login_user(user, remember=form.remember.data)
-            return redirect(url_for('home'))
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title="Login" , form=form)
@@ -65,6 +66,7 @@ def logout():
     return redirect(url_for('home'))
 
 @app.route('/profile')
+@login_required
 def profile():
     """
     renders profile page
@@ -74,6 +76,7 @@ def profile():
     return render_template('profile.html', title="Profile")
 
 @app.route('/editprofile', methods=['GET', 'POST'])
+@login_required
 def editprofile():
     """
     renders edit profile page
@@ -91,6 +94,7 @@ def editprofile():
         return redirect(url_for('profile'))
 
 @app.route('/addskills', methods=['GET', 'POST'])
+@login_required
 def addskills():
     """
     renders add skills page
@@ -101,6 +105,7 @@ def addskills():
     
 
 @app.route('/jobs')
+@login_required
 def jobs():
     """
     renders jobs page
@@ -118,6 +123,7 @@ def projects():
     render_template('projects.html', title="Projects")
 
 @app.route('/myprojects', methods=['GET', 'POST'])
+@login_required
 def myprojects():
     """
     route to user projects page that can be edited
@@ -125,9 +131,10 @@ def myprojects():
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
     
-    render_template('myprojects.html', title="My Projects")
+    return render_template('myprojects.html', title="My Projects")
 
 @app.route('/createproject', methods=['GET', 'POST'])
+@login_required
 def createproject():
     """
     route to create project page
