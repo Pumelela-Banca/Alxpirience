@@ -18,10 +18,11 @@ class User(db.Model, UserMixin):
     creates user table or model
     it has id, username, email, country and password
     """
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    country = db.Column(db.String(20), nullable=False)
+    git_hub = db.Column(db.String(120), nullable=False)
+    country = db.Column(db.String(40), nullable=False)
     password = db.Column(db.String(60), nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     skills = db.relationship('Skills', backref='author', lazy=True)
@@ -31,7 +32,7 @@ class User(db.Model, UserMixin):
         """
         returns a string representation of the user
         """
-        return f"User('{self.username}', '{self.email}', '{self.country}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}', '{self.country}', '{self.image_file}', '{self.git_hub}')"
 
 
 class Skills(db.Model):
@@ -39,7 +40,7 @@ class Skills(db.Model):
     creates skills table or model
     it has id, skill and user_id
     """
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     skill = db.Column(db.String(20), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
@@ -55,10 +56,11 @@ class Projects(db.Model):
     creates projects table or model
     it has id, project_name, project_description, project_link and user_id
     """
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     project_name = db.Column(db.String(100), nullable=False)
     project_description = db.Column(db.Text, nullable=False)
     project_link = db.Column(db.String(120), nullable=False)
+    skills_required = db.Column(db.String(120), nullable=False)
     project_status = db.Column(db.String(20), nullable=False, default='pending')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 

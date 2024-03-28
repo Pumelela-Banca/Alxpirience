@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from expirience.data_base import User
+from flask_login import current_user
 
 
 class RegisterForm(FlaskForm):
@@ -23,6 +24,8 @@ class RegisterForm(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
                            validators=[DataRequired(), Email()])
+    git_hub = StringField('GitHub-user-name',
+                           validators=[DataRequired()])
     country = SelectField('Select an African Country', choices=AFRICAN_COUNTRIES)
     password = PasswordField('Password',
                              validators=[DataRequired()])
@@ -73,21 +76,24 @@ class UserUpdateForm(FlaskForm):
     #skills = StringField('Skills')
     submit = SubmitField('Update')
 
-    def validate_field(self, field):
+    def validate_username(self, username):
         """
         validates user name uniquesness
         """
-        user = User.query.filter_by(username=field.data).first()
-        if user:
-            raise ValidationError("Username is taken. Please choose a different one.")
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError("Username is taken. Please choose a different one.")
+        
         
     def validate_email(self, email):
         """
         validates email uniquesness
         """
-        user = User.query.filter_by(email=email.data).first()
-        if user:
-            raise ValidationError("Email is taken. Please choose a different one.")
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError("Email is taken. Please choose a different one.")
 
 
 class CreateJobForm(FlaskForm):
@@ -100,4 +106,6 @@ class CreateJobForm(FlaskForm):
                                     validators=[DataRequired()])
     job_link = StringField('Job Link/Git-Hub Link',
                            validators=[DataRequired()])
+    skills_required = StringField('Skills Required',
+                                 validators=[DataRequired()])
     submit = SubmitField('Create Job')

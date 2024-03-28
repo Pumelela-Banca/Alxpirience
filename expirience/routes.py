@@ -10,6 +10,8 @@ from expirience import app, db, bcrypt
 from .data_base import User, Skills, Projects
 
 
+user_id = None
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -29,7 +31,11 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, country=form.country.data, password=hashed_password)
+        user = User(username=form.username.data,
+                    email=form.email.data,
+                    country=form.country.data,
+                    git_hub=form.git_hub.data,
+                    password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
@@ -44,7 +50,6 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = LoginForm()
-    print(User.query.filter_by(username=form.username.data).first())
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
@@ -142,12 +147,16 @@ def createproject():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
-    
     form = CreateJobForm()
     if form.validate_on_submit():
-        project = Projects(project_name=form.project_name.data, project_description=form.project_description.data, project_link=form.project_link.data)
+
+        project = Projects(project_name=form.job_title.data,
+                           project_description=form.job_description.data,
+                           project_link=form.job_link.data,
+                           skills_required=form.skills_required.data,
+                           author=current_user)
         db.session.add(project)
         db.session.commit()
-        flash(f'Project created for {form.project_name.data}!', 'success')
+        flash(f'Project created for {form.job_title.data}!', 'success')
         return redirect(url_for('home'))
     return render_template('createproject.html', title="Create Project", form=form)
