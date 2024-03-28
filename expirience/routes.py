@@ -137,7 +137,15 @@ def myprojects():
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
     
-    return render_template('myprojects.html', title="My Projects")
+    if request.method == 'POST':
+        project_id = request.form['project_id']
+        project = Projects.query.get(project_id)
+        db.session.delete(project)
+        db.session.commit()
+        flash('Project deleted!', 'success')
+        return redirect(url_for('myprojects'))
+    projects_current_user = [Projects.query.all(), current_user]
+    return render_template('myprojects.html', title="My Projects", form=projects_current_user)
 
 @app.route('/createproject', methods=['GET', 'POST'])
 @login_required
