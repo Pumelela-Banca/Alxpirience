@@ -1,14 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 {% for project in form[0] %}
-    {% if project.author != form.id %}
+    {% if project.author.id == form[1].id %}
         <div class="card" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">{{ project.project_name }}</h5>
                 <p class="card-text">{{ project.project_description }}</p>
                 <a href="project.project_link" class="card-link">{{ project.project_link }}</a>
-                <form action="{{ url_for('myprojects') }}" method="delete">
-                    <button type="submit" name="action" value="delete">Delete</button>
+                
+                <form action="{{ url_for('myprojects') }}" method="post">
+                    <input type="hidden" name="item_id" value="{{ project.id }}">
+                    <button type="submit" class="btn btn-sm btn-primary m-1" >Delete</button>
                 </form>
             </div>
         </div>
@@ -17,10 +19,8 @@
             <div class="card-body">
                 <h5 class="card-title">{{ project.project_name }}</h5>
                 <p class="card-text">{{ project.project_description }}</p>
-                <a href="project.project_link" class="card-link">{{ project.project_link }}</a>
-                <form>
-                    <button type="submit" name="action" value="delete" disabled >Delete</button>
-                </form>
+                <a href="project.project_link" class="card-link">{{ project.project_link }}</a><br>
+                <button type="button" class="btn btn-sm btn-primary m-1" disabled>Accept  Job</button>
             </div>
         </div>
     {% endif %}

@@ -130,7 +130,7 @@ def projects():
     """
     render_template('projects.html', title="Projects")
 
-@app.route('/myprojects', methods=['GET', 'DELETE'])
+@app.route('/myprojects', methods=['GET', 'POST'])
 @login_required
 def myprojects():
     """
@@ -139,8 +139,8 @@ def myprojects():
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
     
-    if request.method == 'DELETE':
-        project_id = request.form['project_id']
+    if request.method == 'POST':
+        project_id = request.form.get('item_id')
         project = Projects.query.get(project_id)
         db.session.delete(project)
         db.session.commit()
