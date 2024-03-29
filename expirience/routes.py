@@ -18,7 +18,9 @@ def home():
     """
     renders home page
     """
-    return render_template('home.html', title="Home", jobs=Projects.query.all())
+    jobs = Projects.query.all()
+    print(jobs)
+    return render_template('home.html', title="Home", jobs=jobs)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
