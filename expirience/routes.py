@@ -110,18 +110,6 @@ def addskills():
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
     render_template('addskills.html', title="Add Skills")
-    
-
-@app.route('/jobs')
-@login_required
-def jobs():
-    """
-    renders jobs page
-    all other peoples jobs skips user
-    """
-    # to do
-    return render_template('jobs.html', title="Jobs")
-
 
 @app.route('/projects')
 def projects():
@@ -178,3 +166,20 @@ def about():
     renders about page
     """
     return render_template('about.html', title="About")
+
+@app.route('/jobs', methods=['GET', 'POST'])
+@login_required
+def get_job():
+    """
+    route to get job page and apply for job
+    """
+    if not current_user.is_authenticated:
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        #project_id = request.form.get('item_id')
+        #project = Projects.query.get(project_id)
+        flash('Accepted Job', 'success')
+        return redirect(url_for('Home'))
+    projects_current_user = [Projects.query.all(), current_user]
+    print(projects_current_user, "User Projects")
+    return render_template('jobs.html', title="Get Job", form=projects_current_user)
