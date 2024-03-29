@@ -1,4 +1,4 @@
-{% extends "home.html" %}
+{% extends "layout.html" %}
 {% block content %}
 {% for project in form[0] %}
     {% if project.author != form.id %}
@@ -7,7 +7,7 @@
                 <h5 class="card-title">{{ project.project_name }}</h5>
                 <p class="card-text">{{ project.project_description }}</p>
                 <a href="project.project_link" class="card-link">{{ project.project_link }}</a>
-                <form action="/your-endpoint" method="post">
+                <form action="{{ url_for('myprojects') }}" method="delete">
                     <button type="submit" name="action" value="delete">Delete</button>
                 </form>
             </div>
@@ -18,7 +18,7 @@
                 <h5 class="card-title">{{ project.project_name }}</h5>
                 <p class="card-text">{{ project.project_description }}</p>
                 <a href="project.project_link" class="card-link">{{ project.project_link }}</a>
-                <form action="/your-endpoint" method="post">
+                <form>
                     <button type="submit" name="action" value="delete" disabled >Delete</button>
                 </form>
             </div>

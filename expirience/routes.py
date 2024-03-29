@@ -18,7 +18,7 @@ def home():
     """
     renders home page
     """
-    return render_template('home.html', title="Home")
+    return render_template('home.html', title="Home", jobs=Projects.query.all())
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -128,7 +128,7 @@ def projects():
     """
     render_template('projects.html', title="Projects")
 
-@app.route('/myprojects', methods=['GET', 'POST'])
+@app.route('/myprojects', methods=['GET', 'DELETE'])
 @login_required
 def myprojects():
     """
@@ -137,7 +137,7 @@ def myprojects():
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
     
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         project_id = request.form['project_id']
         project = Projects.query.get(project_id)
         db.session.delete(project)
