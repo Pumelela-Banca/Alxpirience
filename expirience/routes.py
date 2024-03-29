@@ -178,8 +178,7 @@ def get_job():
     if request.method == 'POST':
         #project_id = request.form.get('item_id')
         #project = Projects.query.get(project_id)
-        flash('Accepted Job', 'success')
-        return redirect(url_for('Home'))
+        flash('Accepted Job - Email sent', 'success')
+        return redirect(url_for('home'))
     projects_current_user = [Projects.query.all(), current_user]
-    print(projects_current_user, "User Projects")
     return render_template('jobs.html', title="Get Job", form=projects_current_user)

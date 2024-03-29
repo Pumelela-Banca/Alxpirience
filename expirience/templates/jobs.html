@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>{{ form }}</h1>
 {% for project in form[0] %}
     {% if project.author.id != form[1].id %}
         <div class="card" style="width: 18rem;">
