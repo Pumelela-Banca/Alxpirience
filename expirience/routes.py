@@ -170,3 +170,11 @@ def createproject():
         flash(f'Project created for {form.job_title.data}!', 'success')
         return redirect(url_for('home'))
     return render_template('createproject.html', title="Create Project", form=form)
+
+
+@app.route('/about')
+def about():
+    """
+    renders about page
+    """
+    return render_template('about.html', title="About")
