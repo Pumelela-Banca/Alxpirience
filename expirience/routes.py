@@ -8,7 +8,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 from expirience import app, db, bcrypt
 from .data_base import User, Skills, Projects
-from send_email import send_to_job_taker, send_to_job_poster
+from expirience.send_email import send_to_job_taker, send_to_job_poster
 
 
 user_id = None
@@ -20,7 +20,6 @@ def home():
     renders home page
     """
     jobs = Projects.query.all()
-    print(jobs)
     return render_template('home.html', title="Home", jobs=jobs)
 
 @app.route('/register', methods=['GET', 'POST'])
