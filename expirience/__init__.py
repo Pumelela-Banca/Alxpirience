@@ -1,4 +1,5 @@
 from flask import Flask
+import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import OperationalError
 from flask_bcrypt import Bcrypt
@@ -15,6 +16,7 @@ bcrypt = Bcrypt(app)
 loginManager = LoginManager(app)
 loginManager.login_view = 'login'
 loginManager.login_message_category = 'info'
+
 
 from expirience import routes
 

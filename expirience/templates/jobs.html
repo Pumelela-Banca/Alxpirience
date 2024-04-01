@@ -7,9 +7,9 @@
                 <h5 class="card-title">{{ project.project_name }}</h5>
                 <p class="card-text">{{ project.project_description }}</p>
                 <a href="project.project_link" class="card-link">{{ project.project_link }}</a>
-                
-                <form action="" method="post">
-                    <!--<input type="hidden" name="item_id" value="{{ project.id }}">-->
+
+                <form action="{{ url_for('get_job') }}" method="post">
+                    <input type="hidden" name="item_id" value="{{ project.id }}">
                     <button type="submit" class="btn btn-sm btn-primary m-1" >Accept Job</button>
                 </form>
             </div>

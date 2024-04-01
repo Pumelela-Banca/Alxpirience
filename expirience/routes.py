@@ -8,6 +8,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 from expirience import app, db, bcrypt
 from .data_base import User, Skills, Projects
+from send_email import send_to_job_taker, send_to_job_poster
 
 
 user_id = None
@@ -167,6 +168,13 @@ def about():
     """
     return render_template('about.html', title="About")
 
+
+def send_confirmation_email(user):
+    """
+    sends email to user
+    """
+    pass
+
 @app.route('/jobs', methods=['GET', 'POST'])
 @login_required
 def get_job():
@@ -176,8 +184,10 @@ def get_job():
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
     if request.method == 'POST':
-        #project_id = request.form.get('item_id')
+        project_id = request.form.get('item_id')
         #project = Projects.query.get(project_id)
+        send_to_job_taker(current_user.id, project_id)
+        send_to_job_poster(current_user.id, project_id)
         flash('Accepted Job - Email sent', 'success')
         return redirect(url_for('home'))
     projects_current_user = [Projects.query.all(), current_user]
