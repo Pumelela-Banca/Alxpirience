@@ -168,13 +168,6 @@ def about():
     """
     return render_template('about.html', title="About")
 
-
-def send_confirmation_email(user):
-    """
-    sends email to user
-    """
-    pass
-
 @app.route('/jobs', methods=['GET', 'POST'])
 @login_required
 def get_job():
