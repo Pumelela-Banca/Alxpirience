@@ -117,17 +117,19 @@ def addskills():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
-    skills = SkillsForm()
-    if skills.validate_on_submit():
-        for value in skills.data.values():
+    form = SkillsForm()
+    if form.validate_on_submit():
+        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+        for value in form.data.values():
             if value == 'Submit' or value == "No":
                 continue
             skill = Skills(skill=value, author=current_user)
             db.session.add(skill)
-        db.session.commit()
+            db.session.commit()
         flash('Skills added!', 'success')
-        return redirect(url_for('profile'))
-    render_template('addskills.html', title="Add Skills")
+        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+        return redirect(url_for('home'))
+    return render_template('addskills.html', title="Add Skills", form=form)
 
 @app.route('/projects')
 def projects():
