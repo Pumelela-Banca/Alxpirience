@@ -109,3 +109,16 @@ class CreateJobForm(FlaskForm):
     skills_required = StringField('Skills Required',
                                  validators=[DataRequired()])
     submit = SubmitField('Create Job')
+
+
+class SkillsForm(FlaskForm):
+    """
+    controls skills form
+    """
+    skill = StringField('Skill',
+                        validators=[DataRequired()])
+    skill_1 = StringField('Skill-1', default="No")
+    skill_2 = StringField('Skill-2', default="No")
+    skill_3 = StringField('Skill-3', default="No")
+    skill_4 = StringField('Skill-4', default="No")
+    submit = SubmitField('Add Skill')

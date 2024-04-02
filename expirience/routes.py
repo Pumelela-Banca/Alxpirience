@@ -3,7 +3,8 @@ Runns app and routes
 """
 
 from flask import render_template, url_for, flash, redirect, request
-from .home.log_in import RegisterForm, LoginForm, UserUpdateForm, CreateJobForm
+from .home.log_in import (RegisterForm, SkillsForm,
+                          LoginForm, UserUpdateForm, CreateJobForm)
 from flask_login import login_user, current_user, logout_user, login_required
 
 from expirience import app, db, bcrypt
@@ -80,7 +81,14 @@ def profile():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
-    return render_template('profile.html', title="Profile")
+    print(Skills.query.all())
+    if not Skills.query.all():
+        return render_template('profile.html', title="Profile", form=None)
+    return render_template('profile.html', title="Profile",
+                           form=Skills.query.filter(
+                               Skills.author.has(
+                                   id=current_user.id).order_by(
+                                       Skills.id.desc()).all()))
 
 @app.route('/editprofile', methods=['GET', 'POST'])
 @login_required
@@ -109,6 +117,16 @@ def addskills():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
+    skills = SkillsForm()
+    if skills.validate_on_submit():
+        for value in skills.data.values():
+            if value == 'Submit' or value == "No":
+                continue
+            skill = Skills(skill=value, author=current_user)
+            db.session.add(skill)
+        db.session.commit()
+        flash('Skills added!', 'success')
+        return redirect(url_for('profile'))
     render_template('addskills.html', title="Add Skills")
 
 @app.route('/projects')
