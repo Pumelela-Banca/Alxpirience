@@ -117,8 +117,8 @@ class SkillsForm(FlaskForm):
     """
     skill = StringField('Skill',
                         validators=[DataRequired()])
-    skill_1 = StringField('Skill-1', default="No")
-    skill_2 = StringField('Skill-2', default="No")
-    skill_3 = StringField('Skill-3', default="No")
-    skill_4 = StringField('Skill-4', default="No")
+    skill_1 = StringField('Skill-1')
+    skill_2 = StringField('Skill-2')
+    skill_3 = StringField('Skill-3')
+    skill_4 = StringField('Skill-4')
     submit = SubmitField('Add Skill')

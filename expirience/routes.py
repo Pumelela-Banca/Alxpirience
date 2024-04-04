@@ -85,10 +85,7 @@ def profile():
     if not Skills.query.all():
         return render_template('profile.html', title="Profile", form=None)
     return render_template('profile.html', title="Profile",
-                           form=Skills.query.filter(
-                               Skills.author.has(
-                                   id=current_user.id).order_by(
-                                       Skills.id.desc()).all()))
+                           form=Skills.query.filter_by(author=current_user).all())
 
 @app.route('/editprofile', methods=['GET', 'POST'])
 @login_required
@@ -119,15 +116,13 @@ def addskills():
         return redirect(url_for('home'))
     form = SkillsForm()
     if form.validate_on_submit():
-        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
         for value in form.data.values():
-            if value == 'Submit' or value == "No":
+            if value == 'Submit' or value == None:
                 continue
             skill = Skills(skill=value, author=current_user)
             db.session.add(skill)
             db.session.commit()
         flash('Skills added!', 'success')
-        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
         return redirect(url_for('home'))
     return render_template('addskills.html', title="Add Skills", form=form)
 
