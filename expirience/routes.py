@@ -1,7 +1,9 @@
 """
 Runns app and routes
 """
-
+import os
+import secrets
+from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from .home.log_in import (RegisterForm, SkillsForm,
                           LoginForm, UserUpdateForm, CreateJobForm)
@@ -38,7 +40,8 @@ def register():
                     email=form.email.data,
                     country=form.country.data,
                     git_hub=form.git_hub.data,
-                    password=hashed_password)
+                    password=hashed_password,
+                    image_file=url_for('static', filename='profile_pics/' + 'Generic-Profile-Image.png'))
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
@@ -81,11 +84,26 @@ def profile():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
-    print(Skills.query.all())
+    image_file = current_user.image_file
     if not Skills.query.all():
         return render_template('profile.html', title="Profile", form=None)
-    return render_template('profile.html', title="Profile",
+    return render_template('profile.html', title="Profile", image_file=image_file,
                            form=Skills.query.filter_by(author=current_user).all())
+
+def save_picture(form_picture):
+    """
+    saves picture to file
+    """
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    # resize picture for memory
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
 
 @app.route('/editprofile', methods=['GET', 'POST'])
 @login_required
@@ -97,14 +115,19 @@ def editprofile():
         return redirect(url_for('home'))
     
     form = UserUpdateForm()
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.country = form.country.data
         db.session.commit()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('profile'))
-    return render_template('editprofile.html', title="Edit Profile", form=form)
+    return render_template('editprofile.html', image_file=image_file,
+                           title="Edit Profile", form=form)
 
 @app.route('/addskills', methods=['GET', 'POST'])
 @login_required
