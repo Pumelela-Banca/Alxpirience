@@ -23,7 +23,7 @@ def home():
     renders home page
     """
     page = request.args.get('page', 1, type=int)
-    jobs = Projects.query.paginate(per_page=5)
+    jobs = Projects.query.paginate(page=page, per_page=5)
     return render_template('home.html', title="Home", jobs=jobs)
 
 @app.route('/register', methods=['GET', 'POST'])
