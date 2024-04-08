@@ -25,7 +25,7 @@ def home():
     page = request.args.get('page', 1, type=int)
     jobs = Projects.query.paginate(per_page=5)
     return render_template('home.html', title="Home", jobs=jobs)
- 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
@@ -46,7 +46,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('register.html', title="Register", form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
