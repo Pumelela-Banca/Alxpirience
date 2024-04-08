@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1 class="mb-3">Projects by {{ user.username }} ({{ jobs.total }})  </h1>
+{% for project in jobs %}
+    {% if project.author == user %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ project.project_name }}</h5>
+                <p class="card-text">{{ project.project_description }}</p>
+                <a href="project.project_link" class="card-link">{{ project.project_link }}</a>
+                <form action="{{ url_for('get_job') }}" method="post">
+                    <input type="hidden" name="item_id" value="{{ project.id }}">
+                    <button type="submit" class="btn btn-sm btn-primary m-1" >Accept Job</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+{% for page_num in jobs.iter_pages(left_edge=1, right_edge=1, right_current=2) %}
+        {% if page_num %}
+          {% if jobs.page == page_num %}
+            <a class="btn btn-secondary mb-4" href="{{ url_for('get_job', page=page_num) }}">{{ page_num }}</a>
+          {% else %}
+            <a class="btn btn-info mb-4" href="{{ url_for('get_job', page=page_num) }}">{{ page_num }}</a>
+          {% endif %}
+        {% else %}
+          
+        {% endif %}
+      {% endfor %}
+{% endblock %}

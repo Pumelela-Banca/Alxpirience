@@ -240,3 +240,15 @@ def get_job():
     page = request.args.get('page', 1, type=int)
     projects_current_user = [Projects.query.paginate(page=page, per_page=5), current_user]
     return render_template('jobs.html', title="Get Job", form=projects_current_user)
+
+@app.route('/user/<string:username>', methods=['GET', 'POST'])
+def user_jobs(username):
+    """
+    gets user specific jobs
+    """
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    jobs = Projects.query.filter_by(author=user)\
+        .paginate(page=page, per_page=5)
+    return render_template('user_jobs.html',
+                           title="Home", jobs=jobs, user=user)
