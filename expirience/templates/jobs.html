@@ -22,7 +22,18 @@
                 <a href="project.project_link" class="card-link">{{ project.project_link }}</a><br>
                 <button type="button" class="btn btn-sm btn-primary m-1" disabled>My Project</button>
             </div>
-        </div>
+        </div></br>
     {% endif %}
 {% endfor %}
+{% for page_num in form[0].iter_pages(left_edge=1, right_edge=1, right_current=2) %}
+        {% if page_num %}
+          {% if form[0].page == page_num %}
+            <a class="btn btn-secondary mb-4" href="{{ url_for('get_job', page=page_num) }}">{{ page_num }}</a>
+          {% else %}
+            <a class="btn btn-info mb-4" href="{{ url_for('get_job', page=page_num) }}">{{ page_num }}</a>
+          {% endif %}
+        {% else %}
+          
+        {% endif %}
+      {% endfor %}
 {% endblock %}

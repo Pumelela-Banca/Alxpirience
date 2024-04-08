@@ -237,5 +237,6 @@ def get_job():
         send_to_job_poster(current_user.id, project_id)
         flash('Accepted Job - Email sent', 'success')
         return redirect(url_for('home'))
-    projects_current_user = [Projects.query.all(), current_user]
+    page = request.args.get('page', 1, type=int)
+    projects_current_user = [Projects.query.paginate(page=page, per_page=5), current_user]
     return render_template('jobs.html', title="Get Job", form=projects_current_user)
