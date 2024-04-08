@@ -42,7 +42,7 @@ def register():
                     country=form.country.data,
                     git_hub=form.git_hub.data,
                     password=hashed_password,
-                    image_file=url_for('static', filename='profile_pics/' + 'Generic-Profile-Image.png'))
+                    image_file='Generic-Profile-Image.png')
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
@@ -85,7 +85,9 @@ def profile():
     """
     if not current_user.is_authenticated:
         return redirect(url_for('home'))
-    image_file = current_user.image_file
+    image_file = image_file = url_for('static',
+                                      filename='profile_pics/' + \
+                                        current_user.image_file)
     if not Skills.query.all():
         return render_template('profile.html', title="Profile", form=None)
     return render_template('profile.html', title="Profile", image_file=image_file,
@@ -140,28 +142,27 @@ def addskills():
         return redirect(url_for('home'))
     form = SkillsForm()
     if form.validate_on_submit():
-        for value in form.data.values():
-            for val, ky in form.data.items():
-                if ky == "skill":
-                    skill = Skills(skill=val, author=current_user)
-                    db.session.add(skill)
-                    db.session.commit()
-                elif ky == "skill_1":
-                    skill = Skills(skill_1=val, author=current_user)
-                    db.session.add(skill)
-                    db.session.commit()
-                elif ky == "skill_2":
-                    skill = Skills(skill_2=val, author=current_user)
-                    db.session.add(skill)
-                    db.session.commit()
-                elif ky == "skill_3":
-                    skill = Skills(skill_3=val, author=current_user)
-                    db.session.add(skill)
-                    db.session.commit()
-                elif ky == "skill_4":
-                    skill = Skills(skill_4=val, author=current_user)
-                    db.session.add(skill)
-                    db.session.commit()
+        for val, ky in form.data.items():
+            if ky == "skill":
+                skill = Skills(skill=val, author=current_user)
+                db.session.add(skill)
+                db.session.commit()
+            elif ky == "skill_1":
+                skill = Skills(skill_1=val, author=current_user)
+                db.session.add(skill)
+                db.session.commit()
+            elif ky == "skill_2":
+                skill = Skills(skill_2=val, author=current_user)
+                db.session.add(skill)
+                db.session.commit()
+            elif ky == "skill_3":
+                skill = Skills(skill_3=val, author=current_user)
+                db.session.add(skill)
+                db.session.commit()
+            elif ky == "skill_4":
+                skill = Skills(skill_4=val, author=current_user)
+                db.session.add(skill)
+                db.session.commit()
         flash('Skills added!', 'success')
         return redirect(url_for('home'))
     return render_template('addskills.html', title="Add Skills", form=form)
