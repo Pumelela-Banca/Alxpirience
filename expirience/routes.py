@@ -4,8 +4,9 @@ Runns app and routes
 import os
 import secrets
 from PIL import Image
+from mailersend import emails
 from flask import render_template, url_for, flash, redirect, request
-from .home.log_in import (RegisterForm, SkillsForm,
+from .home.log_in import (RegisterForm, SkillsForm, ResetPasswordForm, RequestResetForm,
                           LoginForm, UserUpdateForm, CreateJobForm)
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -13,6 +14,10 @@ from expirience import app, db, bcrypt
 from .data_base import User, Skills, Projects
 from expirience.send_email import send_to_job_taker, send_to_job_poster
 
+
+key = open("expirience/access_token.txt", "r").read().rstrip("\n")
+
+mailer = emails.NewEmail(key)
 
 user_id = None
 
@@ -253,3 +258,71 @@ def user_jobs(username):
         .paginate(page=page, per_page=5)
     return render_template('user_jobs.html',
                            title="Home", jobs=jobs, user=user)
+
+def send_reset_email(user):
+    """
+    sends token to reset email
+    """
+    token = user.get_reset_token()
+    mail_body = {}
+    mail_from = {
+        "name": "Axperience",
+        "email": "pumelelaapps@gmail.com"
+    }
+    recipients = [
+        {
+            "email": user.email,
+            "name": user.username
+        }
+    ]
+
+    mailer.set_mail_from(mail_from, mail_body)
+    mailer.set_mail_to(recipients, mail_body)
+    mailer.set_subject("Password Reset Request",
+                       mail_body)
+    mailer.set_html_content(f"""To reset your password, visit the following link:\
+                            {url_for('reset_token', token=token, _external=True)}\n
+                            If you did not make this request then simply ignore this email and no changes will be made.\n""",
+                            mail_body)
+    mailer.set_plaintext_content(f"""To reset your password, visit the following link:\
+                            {url_for('reset_token', token=token, _external=True)}\n
+                            If you did not make this request then simply ignore this email and no changes will be made.\n""",
+                            mail_body)
+    mailer.send(mail_body)
+
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_request():
+    """
+    resets password
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title='Reset Password', form=form)
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_token(token):
+    """
+    Takes in reset token
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash(f'Your password has been updated! You are now able to log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Password', form=form)

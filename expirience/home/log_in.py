@@ -126,3 +126,32 @@ class SkillsForm(FlaskForm):
     skill_3 = StringField('Skill-3')
     skill_4 = StringField('Skill-4')
     submit = SubmitField('Add Skill')
+
+
+class RequestResetForm(FlaskForm):
+    """
+    controls reset form
+    """
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        """
+        validates email uniquesness
+        """
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError("There is no account with that email.")
+
+
+class ResetPasswordForm(FlaskForm):
+    """
+    controls reset form
+    """
+    password = PasswordField('Password',
+                             validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+    
