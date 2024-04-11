@@ -1,25 +1,42 @@
 from flask import Flask
-import os
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.exc import OperationalError
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from .config import Config
 
 
-app = Flask(__name__)
-
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-loginManager = LoginManager(app)
-loginManager.login_view = 'login'
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+loginManager = LoginManager()
+loginManager.login_view = 'users.login'
 loginManager.login_message_category = 'info'
 
 
-from expirience import routes
+def create_app(config_class=Config):
+    """
+    creates app using the config class or the default config class
+    This makes state is not stored on the object
+    """
+    app = Flask(__name__)
 
+    app.config.from_object(Config)
 
-with app.app_context():
-    db.create_all()
+    db.init_app(app)
+    bcrypt.init_app(app)
+    loginManager.init_app(app)
+
+    from expirience.users.routes import users
+    from expirience.projects.routes import jobs
+    from expirience.main.routes import main
+    from expirience.skills.routes import skills
+
+    app.register_blueprint(users)
+    app.register_blueprint(jobs)
+    app.register_blueprint(main)
+    app.register_blueprint(skills)
+
+    with app.app_context():
+        db.create_all()
+
+    return app
+

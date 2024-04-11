@@ -13,7 +13,7 @@
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
           <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('home') }}">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">
               <img src="static/images/large.ico" alt="" width="30" height="24" class="d-inline-block align-text-top">
             </a>
             <a class="navbar-brand mr-4" href="/">ALXpirience</a>
@@ -22,7 +22,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
                 <a class="nav-item nav-link" href="/about">About</a>
               </div>
               <!-- Loggedin vs not loggedd in -->
@@ -32,17 +32,17 @@
                     User: {{ current_user.username }}
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{ url_for('editprofile') }}">Edit Profile</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('profile') }}">View Profile</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('addskills') }}">Add Skills</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('createproject') }}">Create Job</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('myprojects') }}">View/Delete My Jobs</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.editprofile') }}">Edit Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.profile') }}">View Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('skills.addskills') }}">Add Skills</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('jobs.createproject') }}">Create Job</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('jobs.myprojects') }}">View/Delete My Jobs</a></li>
                   </ul>
-                    <a class="nav-item nav-link" href="{{ url_for('get_job') }}">Jobs</a>
-                    <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    <a class="nav-item nav-link" href="{{ url_for('jobs.get_job') }}">Jobs</a>
+                    <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
                 {% else %}
-                  <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-                  <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
                 {% endif %}
               </div>
             </div>

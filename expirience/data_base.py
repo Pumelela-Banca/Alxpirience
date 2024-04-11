@@ -2,7 +2,8 @@
 data storage module that uses sqlite
 """
 from itsdangerous import TimedSerializer as Serializer
-from expirience import db, loginManager, app
+from expirience import db, loginManager
+from flask import current_app as app
 from flask_login import UserMixin
 
 

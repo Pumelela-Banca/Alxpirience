@@ -8,7 +8,7 @@
                 <p class="card-text">{{ project.project_description }}</p>
                 <a href="project.project_link" class="card-link">{{ project.project_link }}</a>
 
-                <form action="{{ url_for('get_job') }}" method="post">
+                <form action="{{ url_for('jobs.get_job') }}" method="post">
                     <input type="hidden" name="item_id" value="{{ project.id }}">
                     <button type="submit" class="btn btn-sm btn-primary m-1" >Accept Job</button>
                 </form>
@@ -19,7 +19,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ project.project_name }}</h5>
                 <p class="card-text">{{ project.project_description }}</p>
-                <a href="project.project_link" class="card-link">{{ project.project_link }}</a><br>
+                <a href="project.project_link" target="_blank" class="card-link">{{ project.project_link }}</a><br>
                 <button type="button" class="btn btn-sm btn-primary m-1" disabled>My Project</button>
             </div>
         </div></br>
@@ -28,9 +28,9 @@
 {% for page_num in form[0].iter_pages(left_edge=1, right_edge=1, right_current=2) %}
         {% if page_num %}
           {% if form[0].page == page_num %}
-            <a class="btn btn-secondary mb-4" href="{{ url_for('get_job', page=page_num) }}">{{ page_num }}</a>
+            <a class="btn btn-secondary mb-4" href="{{ url_for('jobs.get_job', page=page_num) }}">{{ page_num }}</a>
           {% else %}
-            <a class="btn btn-info mb-4" href="{{ url_for('get_job', page=page_num) }}">{{ page_num }}</a>
+            <a class="btn btn-info mb-4" href="{{ url_for('jobs.get_job', page=page_num) }}">{{ page_num }}</a>
           {% endif %}
         {% else %}
           
