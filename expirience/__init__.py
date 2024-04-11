@@ -29,11 +29,13 @@ def create_app(config_class=Config):
     from expirience.projects.routes import jobs
     from expirience.main.routes import main
     from expirience.skills.routes import skills
+    from expirience.errors.handlers import errors
 
     app.register_blueprint(users)
     app.register_blueprint(jobs)
     app.register_blueprint(main)
     app.register_blueprint(skills)
+    app.register_blueprint(errors)
 
     with app.app_context():
         db.create_all()
