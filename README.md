@@ -14,7 +14,7 @@ The **Alxpirience** is a platform designed to connect software engineering stude
    - Showcase your expertise and let others know what you're passionate about.
 
 3. **Job Board**:
-   - ASEN's job board allows students to post job opportunities or project collaborations.
+   - Our's job board allows students to post job opportunities or project collaborations.
    - Students can create job listings, specifying requirements, duration, and compensation.
    - Other students can browse the job listings and express interest.
 
